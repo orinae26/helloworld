@@ -1,18 +1,20 @@
 // SPDX-License-Identifier: MIT
 //compiler btwn 0.8.10 and 0.9.0
 pragma solidity >=0.8.10 <0.9.0;
-  contract Immutable{
 
-    //coding convention to uppercase constant variables
+//to write or read state variable you need to send a transaction
+//you can read state variable without sending a transaction
+  contract SimpleStorage{
+    //state variable to store a number
+    uint public num;
 
-    address public immutable MY_ADDRESS;
-    uint public immutable MY_UINT ;
-
-
-    constructor (uint _myUint){
-      MY_UINT = _myUint;
-      MY_ADDRESS = msg.sender;
-
+    //function to send transaction to to write to a state variable
+    function set(uint _num)public{
+      num = _num;
     }
 
+    //function to read from state variable without sending a transaction
+    function get()public view returns (uint){
+      return num;
+    }
   }
