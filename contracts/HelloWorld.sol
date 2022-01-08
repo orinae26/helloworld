@@ -58,3 +58,51 @@ contract Loop{
     }
   }
 }
+
+//mapping syntax : mapping(keytyype => valuetype) identifier
+//keytype are such as address, uint, bytes32, string, etc
+//valuetype are any type: uint, address,maps, arrays
+//maps are used to store key-value pairs
+//maps are not iterable
+
+
+contract Mapping{
+  //mapping 
+  mapping (address => uint ) public myMap;
+
+  function get(address _addr) public view returns(uint){
+
+    //mapping always returns a values 
+    // if value was not set it returns the default value
+    return myMap[_addr];
+  }
+// update value at key
+  function set (address _addr1, uint _i) public {
+    myMap[_addr1] = _i;
+
+  }
+
+  //reset value to default
+
+  function reset(address _addr) public{
+    delete myMap[_addr];
+  }
+}
+
+contract Nested {
+  mapping(address => mapping(uint => bool)) public nested;
+
+  function get(address _addr1, uint _i) public view returns(bool){
+    return nested[_addr1][_i];
+  }
+
+  function set(address _addr1, uint _i, bool _boo) public {
+    nested [_addr1][_i] = _boo;
+
+  }
+
+  function remove(address _addr1, uint _i) public{
+    delete nested [_addr1][_i];
+  }
+  
+}
