@@ -35,3 +35,26 @@ contract ifElse {
     return _x<10 ? 0 : _x<20 ? 1 : 2;
   }
 }
+//for loop and while loop
+contract Loop{
+  function loop() public pure {
+    //for loop
+
+    for(uint i = 0; i<10; i++){
+
+      if(i==3){
+        //skip to next iteration with continue
+        continue;
+      }
+      if(i==5){
+        //exit loop with break
+        break;
+      }
+    }
+    //while loop
+    uint j;
+    while(j<10){
+      j++;
+    }
+  }
+}
