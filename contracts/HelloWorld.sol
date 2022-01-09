@@ -308,6 +308,60 @@ contract Functions{
     
 }
 
+contract ViewAndPure{
+  
+  uint public x = 1;
+
+  //promise not to modify state
+  function addToX(uint y) public view returns(uint){
+    return x + y;
+  }
+
+  //promise not to modify or read from the state
+
+  function addToPure(uint j, uint k) public pure returns(uint){
+    return j+k;
+  }
+}
+
+
+//errors will undo all the changes made to the state during the execution of a function
+//You can throw an error by calling revert, require or assert
+//Require: used to validate inputs and conditions b4 execution
+//revert : same as require
+//assert : used to check for code that should never be false
+//failing assertion probably means a bug in your code
+
+contract Error{
+  function testRequire(uint _i) public pure{
+    require (_i > 10, "input must be graeter than 10" );
+  }
+  function testRevert(uint _i) public pure{
+    if (_i <= 10){
+      revert("input must be greater than 10");
+    }
+  }
+  uint public num;
+  function testAssert() public  view{ 
+  //assert should only be used to test for internal errors
+  //here we assert that num is always equal to 0
+  //since its impossible to update value of num
+    assert(num==10);
+  }
+
+  //custom error 
+  error InsuffiecientBalance(uint balance, uint withdrawAmount);
+  function testCustomError(uint _withdrawAmount) public view{
+    uint bal = address(this).balance;
+    if (bal < _withdrawAmount){
+      revert InsuffiecientBalance({balance:bal, withdrawAmount: _withdrawAmount});
+    }
+  }
+}
+
+
+
+
 
 
 
