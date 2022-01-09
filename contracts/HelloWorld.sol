@@ -281,3 +281,34 @@ contract DataLocations{
 
 }
 
+contract Functions{
+  //function retun many values
+  function returnMany() public pure returns(uint, bool, uint){
+    return(1,true,2);
+  }
+  //function return named values
+  function named()public pure returns(uint x, bool b, uint y){
+    return(1,true, 2);
+  }
+  //return values asssigned to variables:return statement omitted
+  function assigned()public pure returns (uint x,bool b, uint y){
+    x = 1;
+    b = true;
+    y = 2;
+  }
+  //can use array as input
+  function arrayInput(uint [] memory _arr ) public{
+
+  }
+  //can use array as output
+  uint [] public arr;
+  function arrayOutput() public view returns (uint[] memory){
+    return arr;
+  }
+    
+}
+
+
+
+
+
