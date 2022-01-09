@@ -155,6 +155,10 @@ contract Arrays{
 
 }
 
+
+//Enum help model a set of named constants called statuses
+//can be declared outside a contract
+
 contract Enum{
   //declare shipping statuses
   enum Status{
@@ -195,3 +199,50 @@ contract Enum{
 
 }
 
+//Structs allow us to customise the data types of variables
+//
+contract Struct{
+  //declare struct
+  struct Todo{
+    string text;
+    bool completed;
+  }
+
+  //array of  Todo structs
+  Todo [] public todos;
+
+  //initialise array of Todo structs
+  function create(string memory _text) public {
+    
+    //initialise empty struct
+    Todo memory todo ;
+    todo.text = _text;
+
+    //key value mapping
+    todos.push(Todo({text:_text, completed:false}));
+    
+    //calling it like a function
+    todos.push(Todo(_text, false));
+
+    //todo.completed inotialized to false
+    todos.push(todo);
+
+  }
+
+  //function get for todos 
+  function get(uint i) public view returns (string memory _text, bool _completed){
+    Todo storage todo = todos[i];
+    return (todo.text, todo.completed);
+  }
+  //update text
+  function update(uint i, string memory _text) public{
+    Todo storage todo = todos[i];
+    todo.text = _text;
+  }
+  //update completed
+  function toggleCompleted(uint i, bool _completed) public{
+    Todo storage todo = todos[i];
+    todo.completed = _completed;
+  }
+
+}
