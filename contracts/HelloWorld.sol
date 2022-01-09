@@ -106,3 +106,51 @@ contract Nested {
   }
   
 }
+
+//Arrays 
+
+contract Arrays{
+  uint[] public arr;
+  uint[] public arr2;
+  uint[] public arr3 = [1,2,3];
+  //fixed size arrays
+  uint[10] public myFizedSizedArray;
+
+  //function to return element i of array arr
+
+  function get (uint i) public view returns (uint){
+    return arr[i];
+  }
+
+  //function to return an entire array arr
+  function getArr() public view returns (uint[] memory){
+    return arr;
+  }
+  //function add element i to the end of array arr
+
+  function push(uint _i) public{
+    arr.push(_i);
+  }
+
+  //function to remove last element from array arr
+  function pop() public view{
+    arr.pop;
+  }
+
+  //function to delete element i from array arr
+  
+  function remove(uint index) public{
+    delete arr[index];
+  }
+
+  //function to get the length of array arr
+  function getLength() public view returns (uint){
+    return arr.length;
+
+  }
+  // function create an array in memory
+  function createNewArray() public{
+    arr = new uint[](10);//create array of 10 elements
+  }
+
+}
