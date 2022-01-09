@@ -224,7 +224,7 @@ contract Struct{
     //calling it like a function
     todos.push(Todo(_text, false));
 
-    //todo.completed inotialized to false
+    //todo.completed initialized to false
     todos.push(todo);
 
   }
@@ -246,3 +246,38 @@ contract Struct{
   }
 
 }
+
+//Data Locations: calldata, storage and memory
+//storage is a contract's persistent memory:availble globally
+//memory is a contract's volatile memory: available only in the current function
+//calldata is available on external functions
+
+contract DataLocations{
+  uint [ ] public arr;
+  mapping (uint => address) map;
+  struct MyStruct{
+    uint foo;
+  }
+  mapping(uint =>MyStruct) myStructs;
+  function f()public{ _f(arr, map, myStructs[1]);
+  
+  //get a struct from a mapping
+  MyStruct storage myStruct = myStructs[1];
+  // create a struct in memory
+  MyStruct memory myMemStruct = MyStruct(0);
+  }
+  function _f(uint[] storage _arr,
+   mapping(uint => address) storage _map,
+   MyStruct storage _myStruct) internal 
+  {}
+
+  //return memory variables 
+  function g(uint [] memory _arr) public returns (uint[] memory ){
+  }
+
+  //function to return calldata
+  function h(uint [] calldata _arr) external{  
+  }
+
+}
+
