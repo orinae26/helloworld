@@ -154,3 +154,44 @@ contract Arrays{
   }
 
 }
+
+contract Enum{
+  //declare shipping statuses
+  enum Status{
+    Pending,
+    Shipped,
+    Accepted,
+    Rejected,
+    Cancelled,
+    Delivered
+  }
+  //Status
+  Status public status;
+
+  //return default status
+  function getStatus() public view returns (Status){
+    return status;
+  }
+
+  //set status to Pending
+  function statusPending() public{
+    status = Status.Pending;
+  }
+
+  //set status to Accepted
+  function statusAccepted() public{
+    status = Status.Accepted;
+  }
+
+  //set status to default
+  function statusDefault()public{
+    delete status;
+  }
+
+  //update status by passing uint into input
+  function set(Status _status) public{
+    status = _status;
+  }
+
+}
+
