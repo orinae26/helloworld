@@ -467,6 +467,60 @@ contract Event{
   }
 }
 
+//constructors
+//constructor is an optional function
+//how to pass arguments to a constructor
+
+// base contract X
+contract X {
+  string public name;
+  constructor (string memory _name ) {
+    name = _name;
+  }
+} 
+
+//Base contract Y
+contract Y{
+  string public text;
+  constructor(string memory _text){
+    text = _text;
+  }
+}
+
+//ways to initialize parent contract with parameter
+//pass parameters in inheritance list
+
+contract B is X("Input to X"), Y("Input to Y"){
+
+}
+
+//pass parameters in constructor similar function modifiers
+contract C is X,Y{
+  constructor (string memory _name, string memory _text) X(_name) Y(_text){}
+}
+
+//parent contract are always called in order of inhertance regardless of order of inheritance list
+// order of constructors called
+//1. Y
+//2. X
+//3. D
+
+contract D is X,Y{
+  constructor()X("X was called") Y("Y was called"){}
+}
+
+//order of constructors called
+//1. Y
+//2. X
+//3. E
+
+contract E is X,Y{
+  constructor () Y("Y was called") X("X was called"){}
+}
+
+
+
+
 
 
 
