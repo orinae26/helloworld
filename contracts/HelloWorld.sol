@@ -308,6 +308,10 @@ contract Functions{
     
 }
 
+//Getter functions can be declared view or pure 
+//view functions cannot be modified
+//pure functions cannot be modified or or read/called by other contracts
+
 contract ViewAndPure{
   
   uint public x = 1;
@@ -391,6 +395,64 @@ contract Account{
   }
 
 }
+
+//modifiers are codes that can be run before or after a function
+//modifiers can be used to:
+// 1. resist access
+// 2. prevent reentrancy hack
+// 3. validate inputs
+
+
+contract FunctionModifiers{
+  address public owner;
+  uint public x = 10;
+  bool public locked;
+
+  constructor(){
+    //set transaction sender to be the owner of the contract
+  owner = msg.sender;
+
+  //modifier to check that caller is the owner of the contract
+
+  modifier onlyOwner() {
+    require(msg.sender == owner, "Only owner can call this function");
+    _;
+  }
+  //modifier can take input
+  //modifier to check that the input address is not the zero address
+  modifier validAddress(addresss _addr){
+    require (_addr != address(0), "Invalid Address!");
+    _;
+  }
+  //function to change owner of the contract
+  function changeOwner(address _newOwner) public onlyOwner validAddress(_newOwner){
+    owner = _newOwner;
+  }
+  
+  //modifiers can be called before or after a function 
+  //These modifiers prevent a function from being called while executing
+  modifier noReentrancy(){
+    require (!locked, "No reentrancy");
+    locked = true;
+    _;
+    locked = false;
+  }
+
+  function decrement(uint i)public noReentrancy{
+    x -= i;
+    if (x >1){
+      decrement(i-1);
+    }
+  }
+}
+
+
+
+
+
+
+
+
 
 
 
