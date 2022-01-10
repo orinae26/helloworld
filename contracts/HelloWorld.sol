@@ -411,6 +411,7 @@ contract FunctionModifiers{
   constructor(){
     //set transaction sender to be the owner of the contract
   owner = msg.sender;
+  }
 
   //modifier to check that caller is the owner of the contract
 
@@ -420,7 +421,7 @@ contract FunctionModifiers{
   }
   //modifier can take input
   //modifier to check that the input address is not the zero address
-  modifier validAddress(addresss _addr){
+  modifier validAddress(address _addr){
     require (_addr != address(0), "Invalid Address!");
     _;
   }
@@ -446,7 +447,25 @@ contract FunctionModifiers{
   }
 }
 
+//Events allow logging into a contract: eth blockchain
+//Use cases for events: listening to events and updating interfaces
+//events are cheap form of storage
 
+contract Event{
+  //events declaration
+  //upto 3 parameters can be indexed
+  //indexed parameters can be used to filter logs by indexed parameter
+
+  event Log(address indexed sender, string message);
+  event AnotherLog();
+
+  //function to emit an event
+  function test()public{
+    emit Log(msg.sender,"Hello World!");
+    emit Log(msg.sender, "Hello EVM!");
+    emit AnotherLog();
+  }
+}
 
 
 
