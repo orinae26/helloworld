@@ -648,9 +648,22 @@ contract F is A, B {
     }
 }
 
+//shadowing inherited state variables
+contract A {
+    string public name;
+    function getName()public view returns (string memory){
+      return name;
+    }
+}
 
-
-
+//shadow function getName in inherited contract A
+contract C is A{
+  //correct way to override inherited state variables
+  constructor (){
+    name = "contract C";
+  }
+  // c.getname will return "contract C"
+}
 
 
 
