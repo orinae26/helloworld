@@ -664,16 +664,122 @@ contract C is A{
   }
   // c.getname will return "contract C"
 }
+//
+//calling parent contracts
+//parent contracts can be called directly using the super keyword
+
+//events can be emitted from functions and they are logged into transaction logs
+//this will be useful for tracing transaction calls
+
+contract A{
+  event Log(string message);
+
+  function foo() public virtual{
+    emit Log("A.foo called");
+
+  }
+  function bar()public virtual {
+    emit Log("A.bar called");
+  }
+  
+}
+
+contract B is A {
+  function foo() public virtual override {
+    emit Log("A.foo called");
+    A.foo();
+
+  }
+  function bar () public virtual override {
+    emit Log("B.bar called");
+    super.bar();
+  }
+}
 
 
+contract C is A {
+  function foo() public virtual override {
+    emit Log("A.foo cslled");
+    A.foo();
 
+  }
+  function bar() public virtual override {
+    emit Log("C.bar called");
+    super.bar();
 
+  }
+}
 
+contract D is B,C{
+  //calling D.foo calls C then A although D inherits A, B and C
+  //calling D.bar calls C, B then A. Although super was called teice (by B and C ) it only called A once
+  function foo() public override (B,C) {
+  super.foo();
 
+  }
+  function bar() public override (B,C) {
+  super.bar();
 
+  }
 
+}
 
+//visibility
+//public, private, internal, exter
+//public is the default visibility, visible to other functions and contracts
+//private is only visible to the contract that defines it
+//internal is visible to inside contract that inherits from internal function 
+//external is visible to other contracts and accounts only
 
+contract Base {
+  // private function can only be called inside this contract 
+  //contracts that inherit this contract cannot call this function
+
+  function privateFunc() private pre returns(string memory) {
+    return "Private Function called";
+
+  }
+  function testPrivateFunc() public pure returns(string memory){
+    return privateFunc();
+  }
+  //internal function can be called by functions insside this contract
+  //can also be called by contracts that inherit this contract
+
+  function internalFunc() internal pure returns(string memory){
+    return "Internal Function called";
+  }
+  //test internal function
+  function testInternalFunc() public pure virtual returns (string memory){
+    return internalFunc;
+  }
+  //public functions can be called inside this contract and inside contracts that inherit this contract
+  function publicFunc() piblic pure returns(string memory){
+    return "public function called";
+  }
+  
+  //external functions can only be called by other contracts and accounts 
+  function externalFunc()external pure returns (string memory){
+    return "external function called";
+  }
+  //if we test external function it will throw an error
+  //function testExternalFunc() public pure virtual returns (string memory){
+  //  return externalFunc();
+  //
+  //State variables can be private, internal or public but they cannot be external
+
+  string private privateVar = "my private variable";
+  string internal internalVar = "my internal variable";
+  string public publicVar = "my public variable";
+
+}
+
+contract Child is Base{
+  //inherited contracts do not have access to private functions and state variables
+  //internal functions can be called inside  child contracts
+  function testInternalFunc() public pure override returns (string memeory){
+    return internalFunc();
+  }
+}
 
 
 
