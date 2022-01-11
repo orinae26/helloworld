@@ -859,10 +859,44 @@ contract UniswapExample{
     (uint reserve0, uint reserve1, uint blockTimestampLast) = UniswapV2Pair(pair).getReserves();
     //return the reserves
     return (reserve0, reserve1);
+  }
+}
 
+//address declared payable can receive ether into contract
+
+contract Payable {
+  //payble address
+  address payable public owner;
+  //payable constructor
+  constructor () payable {
+    owner = payable (msg.sender);
   }
 
+  //function to deposit ether into this function
+  //balance will be updated
+  //payable deposit function 
+
+  function deposit() public payable{}
+
+  //function to withdraw all ether from this contract
+
+  function withdraw () public{
+    //get amount of ether in this contract
+    uint amount = address(this).balance;
+    //send all ether to owner
+  
+
+    (bool success,) = owner.call{value:amount}("");
+    require (success, "Failed to send ether");
+  }
+  //function to transfer ether to address in the contract
+
+  function transfer(address payable _to, uint _amout) public{
+    (bool success,) = _to.call{value:_amount}("");
+    require (success, "Failed to send ether");
+  }
 }
+
 
 
 
