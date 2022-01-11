@@ -897,7 +897,51 @@ contract Payable {
   }
 }
 
+//receive ether
+//receive () external payable {} if msg.data is empty
+//fallback () external payable {} if msg.data is not empty
 
+
+contract ReceiveEther{
+  //function to receive ether if msg.data is empty
+  receive () external payable {}
+  //function to receive ether if msg.data is not empty
+  fallback () external payable {}
+}
+
+  //send ether
+  //by function transfer (2300 gas, throws error if failed) :function no longer recommended
+  //by function send (2300 gas, returns bool) :function no longer recommended
+  //by function call (forwars all gas or set gas, returns bool) :function currently recommended
+
+  //call function with combination of reentrance guard is recommended
+
+  //guard against reentrance by:
+  //using reentrance guard modifier
+  //making all state changes before calling other contracts
+
+
+contract SendEther{
+
+  function sendViaTransfer(address payable _to) public payable{
+    _to.transfer(msg.value);
+  }
+  function sendViaSend (address payable _to) public payable{
+    //returns boolean indicating success or failure
+    bool sent = _to.send(msg.value);
+    require (sent, "Failed to send ether");
+  }
+
+  function sendViaCall (address payable _to) public payable{
+    //returns boolean indicating success or failure
+    //current recommended method
+    (bool sent, bytes memory data) = _to.call{value:msg.value}("");
+    require (sent, "Failed to send ether");
+  }
+
+
+
+}
 
 
 
