@@ -938,10 +938,41 @@ contract SendEther{
     (bool sent, bytes memory data) = _to.call{value:msg.value}("");
     require (sent, "Failed to send ether");
   }
-
-
-
 }
+
+//fallback contract 
+//fallback function does not take any arguments nor return any values
+//its executed when a function called does not exist
+//or ether sent to a contract whose receive function does not exist or whose msg.data is not empty
+
+contract Fallback{
+
+  event Log (uint gas);
+  fallback () external payable {
+    emit Log(gasleft());
+  }
+
+  //check balance of this contract
+  function getBalance()public view retuns (uint){
+    return address(this).balance;
+  }
+}
+contract sendToFallback{
+  //transfer ether to fallback contract  
+  function transferTOFallback(address payable _to)public payable{
+    _to.transfer(msg.value);
+  }
+ //send ether to fallback contract
+  function sendToFallback(address payable _to)public payable{
+    _to.send(msg.value);
+  }
+  //send  ether to fallback contract with call
+  function callFallback(address payable _to)public payable{
+    (bool sent, ) = _to.call{value:msg.value}("");
+    require (sent, "Failed to send ether");
+  }
+}
+
 
 
 
