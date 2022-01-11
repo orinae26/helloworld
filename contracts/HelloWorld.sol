@@ -780,6 +780,103 @@ contract Child is Base{
     return internalFunc();
   }
 }
+//Interfaces
+
+//you can interact with contracts using interfaces
+
+//interfaces: can inherit from other interfaces
+// all declared functions must be external
+//cannot declare constructor
+//cannot declare state variables
+//cannot have any functions implemented 
+
+contract Counter {
+  uint public count;
+
+  function increment () external {
+    count++;
+  }
+
+}
+
+interface ICounter {
+  function count () external view returns (uint);
+  
+  function increment () external;
+
+}
+
+//contracts that implement an interface can only call functions that are declared in the interface
+
+contract myContract {
+
+  //external function incrementCounter taking adress variable called _counter
+
+  function incrementCounter (address _counter) external {
+  
+    //get the increment at the address
+    Icounter (_counter).increment ();
+  }
+  //external function getCount takind address variable called _counter and returning uint
+
+  function getCount (address _counter) external view returns (uint){
+  
+    //returns the count variable of the contract at the address
+    return ICounter(_counter).count();
+
+  }
+}
+
+//uniswap example
+interface UniswapV2Factory{
+  //function getPair taking address variables tokenA and tokenB and returning address pair
+  function getPair(address tokenA, address tokenB) returns (address pair);
+
+}
+
+interface UniswapV2Pair{
+
+  //external view fuction getReserves returning uint112, uint112 and uint32
+  function getReserves()external view returns (uint112 reserve0, uint112reserve1, uint32 blockTimestampLast);
+
+}
+
+contract UniswapExample{
+  address private factory = 0x0;
+  address private dai = 0x0;
+  adress private weth = 0x0;
+
+  //external view function getTokenReserves returning uint
+
+
+
+  function getTokenReserves()external view returns (uint, uint){
+
+    //get the factory address
+    address pair = UniswapV2Factory(factory).getPair(dai,weth);
+
+    //get the reserves of the pair
+    (uint reserve0, uint reserve1, uint blockTimestampLast) = UniswapV2Pair(pair).getReserves();
+    //return the reserves
+    return (reserve0, reserve1);
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
