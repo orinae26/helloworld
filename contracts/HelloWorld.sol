@@ -1040,9 +1040,15 @@ contract A {
     (bool success, bytes memory data) = _contract.delegatecall(abi.encodewithSignature("setVars(uint256)", _num));
   }
 }
-
-
-
+//function selectors
+//function selector is a 4 byte string that uniquely identifies a function
+//function selector is used to call a function
+// when a function is called,the first 4 the first 4 bytes of calldat specifies which function to call
+contract FunctionSelector {
+  function getSelector(string calldata _func) external pure returns (bytes4){
+    return bytes4 (keccak256(bytes(_func)));
+  } 
+}
 
 
 
