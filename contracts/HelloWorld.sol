@@ -1050,7 +1050,45 @@ contract FunctionSelector {
   } 
 }
 
+//calling other contracts
+//easiest way to call a contract is to call it like A.foo(x,y,z)
+//anothereway is to use the low-level call though not recommended
 
+contract Callee{
+  uint public x;
+  uint public value;
+  //function to set x and value
+  function setX(uint _x) public returns (uint){
+    x = _x;
+    return x;
+  }
+
+  //function to set x and value and return value and x
+  function setXandSendEther (uint _x) public payable returns (uint,uint){
+    x = _x;
+
+    value = msg.value;
+
+    return (x,value);
+  }
+}
+//contract to call contract Callee
+contract Caller {
+  function setX(Callee _callee, uint _x) public{
+    //call callee contract
+    uint x = _callee.setX(_x);
+  }
+  function setXFromAddress(address _addr, uint _x) public{
+    //call callee contract
+    Callee callee = Callee(_addr);
+    
+    uint x = callee.setX(_x);
+  }
+  function setXandsendEther(Callee _callee, uint _x) public payable{
+    //call callee contract
+    (uint x, uint value) = _callee.setXandSendEther{value:msg.value}(_x);
+  }
+}
 
 
 
