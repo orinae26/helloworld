@@ -1089,6 +1089,62 @@ contract Caller {
     (uint x, uint value) = _callee.setXandSendEther{value:msg.value}(_x);
   }
 }
+//contract to write other contracts
+//contract can create new contracts by using new keyword
+
+contract Car{
+  address public owner;
+  string public model;
+  address public carAddr;
+
+  constructor{
+    owner = _owner;
+    model = _model;
+    carAddr = address(this);
+  }
+}
+
+contract Carfactory{
+
+  //public array of cars
+
+  Car [] public cars;
+  //function to create new car
+  function create(address _owner, string memory _model) public{
+    Car car = new Car(_owner, _model);
+    cars.push(car);
+  }
+  //function create car and send ether
+  function createAndSendEther (address _owner, string memory _model) public payable{
+    Car car = new car {value:msg.value}(_owner, _model);
+    cars.push(car);
+  }
+  //function to create car and send ether to fallback function
+  function create2(address owner, string memory _model,bytes32 salt) public{
+
+    //create new car
+    Car car = (new car){salt:_salt}(owner, _model);
+    //push car to array
+    cars.push(car);
+  }
+
+  function create2AndSendEther(address _owner,string memory _model, bytes32 salt) public payable{
+    //create new car
+    Car car = (new car){value:msg.value, salt : _salt}(owner, _model);
+    //push car to array
+    cars.push(car);
+  }
+//function to get car by index
+  function getCar (uint _index) public view returns (address owner,string memory owner,address carAddr,uint balance ){
+    //get car by index
+    Car car = cars[_index];
+    //get properties of car
+    return (car.owner(), car.model(),carcarAdrr(),address(car).balance);
+  }
+}
+
+
+
 
 
 
