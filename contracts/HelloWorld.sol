@@ -973,6 +973,83 @@ contract sendToFallback{
   }
 }
 
+//call is a low level function to interact with other contracts
+//used when you are sending ether with a fallback function
+//however not the recommended way to interact with other functions
+
+contract Receiver{
+  event Received (address caller, uint amount, string message);
+
+  fallback ()external payable{
+    emit Received(msg.sender, msg.value, "Fallback was called");
+    
+  }
+  function foo(string memory _message, uint _x) public payable returns(uint){
+    emit Received(msg.sender, msg.value, _message);
+
+    return _x +1;
+  }
+
+}
+
+contract Caller{
+  event Response (bool success, bytes data);
+  //we imagine contract B does not have source code for contract A but we know address of A and function to call
+  function testCallFoo(address payable _addr) public payable{
+    //send ether and specify custom amount of gas
+    (bool success, bytes memory data) = _addr.call{value:msg.value,gas:5005}(
+      abi.encodeWithSignature("foo(string,uint256)", "Call foo",123));
+    //check if call was successful
+
+    emit Response (success, data);
+
+  }
+  //calling a function taht do not exist triggers fallback function
+
+  function testCallDoesNotExist(address _addr) public{
+    (bool success,bytes memory data) = _addr.call{value:msg.value}(abi.encodeWithSignature("doesNotExist()"));
+  //check if call was successful
+    emit Response (success, data);
+  }
+}
+
+//delegatecall is a low level function to interact with other contracts similar to call
+//When contract A executes delegate call to contract B, contract B is executed with the same arguments as contract A
+
+//for contract A to call contract B, contract B be deployed first
+
+contract B {
+  uint public num;
+  address public sender;
+  uint public value;
+  //function to be called by contract A
+  function setVars(uint _num) public payable{
+    num = _num;
+    sender = msg.sender;
+    value = msg.value;
+  }
+}
+
+contract A {
+  uint public num;
+  address public sender;
+  uint public value;
+
+  //delegatecall to contract B
+  function setVars(address _contract, uint _num) public payable {
+    (bool success, bytes memory data) = _contract.delegatecall(abi.encodewithSignature("setVars(uint256)", _num));
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
