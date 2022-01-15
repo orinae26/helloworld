@@ -1204,18 +1204,106 @@ contract Bar{
   }
 }
 
+//importing file from same directory
+
+contract Foo{
+  string public name = "Foo";
+}
+
+//import contract foo saved "Foo.sol" in same directory
+
+import "./Foo.sol";
+
+contract Import{
+  //initialize Foo.sol
+
+  Foo public foo = new Foo();
+  //test foo by getting its name
+  function getFooName() public view returns (string memory){
+    return Foo.name();
+  }
+}
+//libraries
+//libraries are similiar to contracts but you cannot declare any state variables nor send ether
+//they are embeded into a contract if all library functions are internal 
+//otherwise they must be deployed and then linked b4 contract is deployed
+
+Library safeMath{
+
+  function add(uint x, uint y) internal pure returns (uint){
+
+    uint z = x+y;
+
+    require (z>=x, "uint overflow");
+
+    return z;
+  }
+}
+Library Math{
+  function sqrt (uint y ) internal pure returns (uint z){
+    if (y>3){
+      z=y;
+      uint x = y/ 2+1;
+
+      while(x<z){
+        z=x;
+        x= (y/x+x)/2;
+      }
+    }
+    else if(y != 0){
+      z=1;
+
+    }
+    //else
+    else {
+      z = 0;
+    }
+  }
+}
 
 
+contract TestSafeMath{
+  using SafeMath for uint;
 
+  uint public MAX_UINT = 2**256 - 1;
 
+  function testAdd (uint x, uint y) public pure returns (uint){
+    return x.add(y);
+  }
 
+  function testSquareRoot(uint x) public pure returns (uint) {
+    return Math.sqrt(x);
+  }
+}
 
+Library Array{
+  // Array function to delete element at index and reorganize the array so that there are no gaps beteewn array elements
+  function remove (uint[]storage arr, uint index) public {
+  //move last element into place to be removed
+  require (arr.length > 0, "array is empty");
+  //indexof array is length of array -1
+  arr[index] =  arr[arr.length - 1];
+  //remove last element
+  arr.pop();
+  }
+}
+contract TestArray{
+  using Array for uint[];
 
+  uint public arr; 
 
+  function testArrayRemove () public {
 
+    for (uint i = 0; i < 3; i++){
+      arr.push(i);
+    }
+    arr.remove(1);
 
-
-
+    assert (arr.length ==2);
+    assert(arr[0]==0);
+    assert(arr[1]==2);
+  }
+}
 
 
 
