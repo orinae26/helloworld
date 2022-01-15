@@ -1435,6 +1435,57 @@ contract VerifySignature{
 }
 
 
+//contract to mint and send coins
+
+contract Coin{
+  address public minter
+  mapping(address =>uint) public balances;
+
+  
+  event Sent(address from, address to, uint amount);
+
+  constructor (){
+    minter = msg.sender;
+  }
+
+  //minting coins
+  function mint(address receiver, uint amount) public{
+
+    //check if sender is minter
+    require(msg.sender == minter, "Only the minter can mint");
+    
+    //add to balances
+    balances[receiver] +=amount;
+
+  }
+
+  //errors
+  error InsufficientBalance(uint requested, uint available);
+
+  //send coins
+
+  function send(address receiver, uint amount) public{
+    //check if sender has sufficient balance
+    if(amount>balance [msg.sender]){
+      //throw error if sender has insufficient balance
+      revert InsuffientBalance({
+        requested :amount,
+        available :balance [msg.sender]
+      });
+    }
+    
+    //else transfer coins
+
+    balance [msg.sender] -= amount;
+    balance [receiver] +=amount;
+    //emit event
+    emit Sent(msg.sender, receiver,amount);
+    
+  }
+
+
+
+}
 
 
 
