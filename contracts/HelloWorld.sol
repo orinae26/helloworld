@@ -1305,8 +1305,55 @@ contract TestArray{
   }
 }
 
+//keccak256 hashing
+//keccak256 is a hash function that takes in a string and returns a 32 byte hash
+//keccak256 is used to hash the contract's code
+//used in commit-reveal scheme
+//used in merkle tree
+//used to compact cryptographic signatures
+// used to create a deterministic unique id for a contract
 
+contract HashFunction{
+  fuction hash(string memory _text, uint _num, address _addr) public pure retuns(bytes32){
 
+    return keccak256(abi.encodePacked(_text,_num,_addr));
+  }
+
+  //hash collision happens when you pass more than one dynamic datatype to abi.encodePacked
+  //this is because abi.encodePacked will encode the dynamic datatype as a 32 byte array
+  //so if you pass more than one dynamic datatype to abi.encodePacked it will create a hash collision
+  //instead you can use abi.encode
+
+  //hash collision function
+  function collision (string memory _text, string memory _anothertext) public pure returns(bytes32){
+    return keccak256(abi.encode(_text,_anothertext));
+  }
+}
+
+contract GuessTheMagicWord{
+  bytes32 public answer = 0x60298f78cc0b47170ba79c10aa3851d7648bd96f2f8e46a19dbc777c36fb0c00;
+
+  function guess(string memory _word) public view returns{
+    return keccak256(_word) == answer;
+  }
+}
+
+//verifying a signature
+//verifying a signature is used to verify that a transaction was signed by the sender
+//messages can be signed off-chain using a contract
+
+//creating a signature
+//1. create a message to sign
+//2. hash the message
+//3. sign the hash(off chain, keep private key a secret)
+
+//verifying a signature
+
+//1.recreate hash from original message
+//2.recover signer from signature and hash
+//3.compare recovered signer with claimed signer
+
+contract VerifySignature
 
 
 
